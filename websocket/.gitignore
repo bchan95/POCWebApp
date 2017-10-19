@@ -1,0 +1,5 @@
+*.pem
+composer.phar
+/vendor
+/localhost_ssl
+.DS_Store

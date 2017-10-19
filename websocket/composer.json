@@ -1,0 +1,15 @@
+{
+  "autoload": {
+    "psr-4": {
+      "ws\\": "src",
+      "Backendservice\\":"src/Backendservice/",
+      "GPBMetadata\\":"src/GPBMetadata/"
+    }
+  },
+  "require": {
+    "cboden/ratchet": "^0.4",
+    "google/protobuf": "^v3.3.0",
+    "grpc/grpc": "v1.2.0",
+    "react/socket": "^0.8.4"
+  }
+}

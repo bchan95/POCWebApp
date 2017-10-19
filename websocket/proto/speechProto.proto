@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+option java_package = "com.example.tutorial";
+option java_outer_classname = "OuterSample";
+option java_multiple_files = true;
+
+package backendservice;
+
+//make this make actual sense, add auth service, make it look less like shit
+service backendService {
+    rpc getTest (stream SpeechRequest) returns (stream SpeechResponse) {
+    }
+}
+message SpeechRequest{
+        oneof msg_request{
+            int32 id = 3;
+            bytes audioData =2[ctype = CORD];
+        }
+    }
+message SpeechResponse{
+    string transcript =1;
+}
+service authService{
+    rpc auth(authRequestMessage) returns (authResponseMessage){
+    }
+}
+message authRequestMessage{
+    int32 userid = 1;
+    int32 clientid = 2;
+}
+message authResponseMessage{
+    string JWT = 1;
+}

@@ -1,0 +1,4 @@
+*.pem
+composer.phar
+/vendor
+/localhost_ssl
