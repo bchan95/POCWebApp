@@ -42,7 +42,12 @@ function setupWebsocket() {
     this.ws.onmessage = function (e) {
         console.log(e.data);
         text = e.data;
-        document.activeElement.textContent = document.activeElement.textContent + text;
+        if(document.activeElement.nodeName === "TEXTAREA") {
+
+            document.activeElement.textContent = document.activeElement.textContent + text + " ";
+        } else{
+            document.getElementById("paragraph").textContent = document.getElementById("paragraph").textContent + text + " ";
+        }
     };
     this.ws.onclose = function () {
         console.log("closed");
@@ -50,10 +55,11 @@ function setupWebsocket() {
     };
     this.ws.onerror = console.log("ERROR");
 }
+
 setupWebsocket();
+
 function initialiseRecording(stream){
     var audio_context = new AudioContext;
-    var sample_rate  =audio_context.sampleRate;
     console.log(audio_context.sampleRate);
     var buffer_size = 2048;
     var audio_input = audio_context.createMediaStreamSource(stream);
@@ -62,7 +68,6 @@ function initialiseRecording(stream){
     audio_input.connect(recorder);
     recorder.connect(audio_context.destination);
 }
-
 function processAudio(e){
     //send bytes of audio to php server using websocket
     if(recording){
@@ -72,6 +77,7 @@ function processAudio(e){
 }
 function convertFloat32ToInt16(buffer) {
     //convert float to int so it can be handled by backend
+    
     l = buffer.length;
     buf = new Int16Array(l);
     var sum = 0;
@@ -80,11 +86,11 @@ function convertFloat32ToInt16(buffer) {
         sum+=buf[l];
     }
     //listen for breaks in speech to allow for receiving transcripts
-    if(sum<900){
+    if(sum<5000){
         console.log(Date.now()-streamstart);
         //if speech not heard for 2 seconds, stop sending audio and send completed signal
         //otherwise keep sending audio
-        if(Date.now()-streamstart>1500 && !stopped){
+        if(Date.now()-streamstart>1000 && !stopped){
             console.log("stop");
             stopped = true;
             ws.send("COMPLETED")

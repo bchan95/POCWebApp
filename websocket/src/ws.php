@@ -23,8 +23,5 @@
         )
         ),
         $loop
-
-
     );
-   // echo dirname(__DIR__) . '/public.pem';
-
+    $server->run();
