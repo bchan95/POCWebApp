@@ -7,15 +7,17 @@ var stopped = true;
 var recording = false;
 var streamstart; //keeps track of last voice heard/time of stream start
 var text = "";
-
+var ws;
 recordButton.addEventListener('click', function(){
-    if(!recording){
-        recordButton.innerText = "Stop";
-        record();
-    }
-    else{
-        recordButton.innerText = "Record";
-        stopRecord();
+    if(ws.readyState === ws.OPEN) {
+        if (!recording) {
+            recordButton.innerText = "Stop";
+            record();
+        }
+        else {
+            recordButton.innerText = "Record";
+            stopRecord();
+        }
     }
 });
 navigator.mediaDevices.getUserMedia({audio:true, video:false}).then(initialiseRecording);
@@ -30,10 +32,10 @@ function stopRecord(){
     ws.send("COMPLETED");
     recording = false;
 }
-var ws;
+
 function setupWebsocket() {
     //sets up websocket connection and keeps it alive no matter what
-    this.ws = new WebSocket("wss://localhost:8443");
+    this.ws = new WebSocket("ws://96.30.155.122:8443");
     this.ws.onopen = function () {
         ws.send("ping");
         console.log("Connected to websocket");
@@ -43,7 +45,6 @@ function setupWebsocket() {
         console.log(e.data);
         text = e.data;
         if(document.activeElement.nodeName === "TEXTAREA") {
-
             document.activeElement.textContent = document.activeElement.textContent + text + " ";
         } else{
             document.getElementById("paragraph").textContent = document.getElementById("paragraph").textContent + text + " ";
@@ -57,7 +58,9 @@ function setupWebsocket() {
 }
 
 setupWebsocket();
-
+//window.onunload = function(){
+  //  ws.send("COMPLETED");
+//};
 function initialiseRecording(stream){
     var audio_context = new AudioContext;
     console.log(audio_context.sampleRate);
@@ -86,11 +89,11 @@ function convertFloat32ToInt16(buffer) {
         sum+=buf[l];
     }
     //listen for breaks in speech to allow for receiving transcripts
-    if(sum<5000){
+    if(sum<6500){
         console.log(Date.now()-streamstart);
         //if speech not heard for 2 seconds, stop sending audio and send completed signal
         //otherwise keep sending audio
-        if(Date.now()-streamstart>1000 && !stopped){
+        if(Date.now()-streamstart>750 && !stopped){
             console.log("stop");
             stopped = true;
             ws.send("COMPLETED")
