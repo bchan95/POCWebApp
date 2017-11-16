@@ -11,11 +11,11 @@ var ws;
 recordButton.addEventListener('click', function(){
     if(ws.readyState === ws.OPEN) {
         if (!recording) {
-            recordButton.innerText = "Stop";
+            recordButton.style.backgroundColor="red";
             record();
         }
         else {
-            recordButton.innerText = "Record";
+            recordButton.style.backgroundColor="white";
             stopRecord();
         }
     }
@@ -44,11 +44,8 @@ function setupWebsocket() {
     this.ws.onmessage = function (e) {
         console.log(e.data);
         text = e.data;
-        if(document.activeElement.nodeName === "TEXTAREA") {
-            document.activeElement.textContent = document.activeElement.textContent + text + " ";
-        } else{
-            document.getElementById("paragraph").textContent = document.getElementById("paragraph").textContent + text + " ";
-        }
+        document.getElementById("paragraph").textContent = document.getElementById("paragraph").textContent + text + "\r\n";
+
     };
     this.ws.onclose = function () {
         console.log("closed");
@@ -93,7 +90,7 @@ function convertFloat32ToInt16(buffer) {
         console.log(Date.now()-streamstart);
         //if speech not heard for 2 seconds, stop sending audio and send completed signal
         //otherwise keep sending audio
-        if(Date.now()-streamstart>750 && !stopped){
+        if(Date.now()-streamstart>2000 && !stopped){
             console.log("stop");
             stopped = true;
             ws.send("COMPLETED")

@@ -1,0 +1,71 @@
+body {
+	background-color: #939393;
+	margin-top: 0;
+}
+
+main {
+	background: url(images/ez-vet-screen.jpg);
+	height: 826px;
+	margin: 0 auto 0 auto;
+	width: 1439px;
+}
+
+.button {
+    border: none;
+	border-radius: 6px;
+    color: white;
+    padding: 6px 5px 6px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 11px;
+    margin: 4px 2px;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    cursor: pointer;
+}
+
+.savebutton {
+    background: #fed838 url(images/button-save.png) no-repeat; 
+	background-position: 6px 6px;
+    color: black; 
+    border: 1px solid #737373;
+}
+
+.savebutton:hover {
+    background-color: #fff4cc;
+}
+
+.recordbutton {
+    background: #ffffff url(images/button-record.png) no-repeat;
+	background-position: 6px 4px;
+    color: black; 
+    border: 1px solid #737373;
+}
+
+.recordbutton:hover {
+    background-color: #ffd6cc;
+}
+
+.button-position {
+	height: auto;
+	left: 198px;
+	position: relative;
+    top: 133px;
+	width: 400px;
+}
+
+.form {
+	left: 465px;
+	position: relative;
+    top: 215px;
+}
+
+.textarea {
+	background: #ffffff;
+    border: 1px solid #999999;
+	border-radius: 6px;
+	height: 250px;
+	padding: 10px;
+	width: 184px;
+}
