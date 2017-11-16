@@ -117,7 +117,7 @@ class client{
         } else{
             while($responses = $this->call->read()){
                 $transcript = $responses->getTranscript();
-                if($transcript!="started") {
+                if($transcript!="started" && $transcript != "") {
                     $final = $final ." ". $transcript ;
                     echo $transcript."!";
                     $this->connection->send($final);

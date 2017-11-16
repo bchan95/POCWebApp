@@ -8,6 +8,7 @@ var recording = false;
 var streamstart; //keeps track of last voice heard/time of stream start
 var text = "";
 var ws;
+var time;
 recordButton.addEventListener('click', function(){
     if(ws.readyState === ws.OPEN) {
         if (!recording) {
@@ -43,8 +44,10 @@ function setupWebsocket() {
     };
     this.ws.onmessage = function (e) {
         console.log(e.data);
-        text = e.data;
-        document.getElementById("paragraph").textContent = document.getElementById("paragraph").textContent + text + "\r\n";
+        text = e.data.charAt(0).toUpperCase() + e.data.slice(1);
+        var newtext = document.getElementById("paragraph").value + text + "\r\n";
+        document.getElementById("paragraph").value = newtext;
+        console.log(Date.now()-time);
 
     };
     this.ws.onclose = function () {
@@ -87,13 +90,14 @@ function convertFloat32ToInt16(buffer) {
     }
     //listen for breaks in speech to allow for receiving transcripts
     if(sum<6500){
-        console.log(Date.now()-streamstart);
+        //console.log(Date.now()-streamstart);
         //if speech not heard for 2 seconds, stop sending audio and send completed signal
         //otherwise keep sending audio
-        if(Date.now()-streamstart>2000 && !stopped){
+        if(Date.now()-streamstart>1750 && !stopped){
             console.log("stop");
             stopped = true;
-            ws.send("COMPLETED")
+            ws.send("COMPLETED");
+
         }
         else{
             ws.send(buf.buffer);
@@ -107,6 +111,7 @@ function convertFloat32ToInt16(buffer) {
         }
         streamstart = Date.now();
         ws.send(buf.buffer);
+        time = Date.now();
     }
 
 }
