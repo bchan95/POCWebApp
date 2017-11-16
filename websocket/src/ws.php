@@ -8,20 +8,20 @@
     require dirname(__DIR__) . '/vendor/autoload.php';
     $loop = LoopFactory::create();
     $socket = new React\Socket\Server(8443, $loop);
-    $server = new IoServer(
+    $server =IoServer::factory(
         new HttpServer(
             new WsServer(
                 new grpcChat()
             )
-        ),
+        ), 8443
          /*
           * //will need to get a new certificate that actually works
           */
          //pass react server to ratchet to enable ssl security
-        new Reactor($socket,$loop, array(
-            'local_cert' =>dirname(__DIR__) . '/localhost_ssl/certificate.pem'
-        )
-        ),
-        $loop
+      //  new Reactor($socket,$loop, array(
+           // 'local_cert' =>dirname(__DIR__) . '/localhost_ssl/certificate.pem'
+            //
+        //),
+      // $loop
     );
     $server->run();

@@ -34,6 +34,7 @@ class grpcChat implements MessageComponentInterface{
                 }
                 else if($msg=="COMPLETED"){
                     if($wsclient->getCall()!=null) {
+                        echo "done";
                         $wsclient->getCall()->writesDone();
                         $wsclient->listen(null);
                     }
@@ -62,13 +63,13 @@ class grpcChat implements MessageComponentInterface{
     public function onError(ConnectionInterface $conn, \Exception $e)
     {
         echo "Error: " . $e;
-        foreach($this->clients as $client){
+        /*foreach($this->clients as $client){
             if($client->getConnection() == $conn){
                 if($client->getCall() != null){
                     $client->getCall()->writesDone();
                 }
             }
-        }
+        }*/
     }
 
 }
